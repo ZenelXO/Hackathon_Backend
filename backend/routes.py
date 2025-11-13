@@ -4,17 +4,15 @@ from bson.objectid import ObjectId
 from bson.binary import Binary
 from datetime import datetime
 import subprocess
-import io
+import os
 
 routes = Blueprint('routes', __name__)
 
 def runMattyConsole():
-    command = ["bin/src.exe"]
-
+    exe_path = os.path.join(os.path.dirname(__file__), "bin", "src.exe")
     try:
-        result = subprocess.run(command, capture_output=True, text=True)
+        result = subprocess.run([exe_path], capture_output=True, text=True)
         return result.stdout.splitlines()[-1]
-
     except Exception as e:
         print(f"Error occurred: {e}")
 
@@ -29,7 +27,7 @@ def create_bottle(location):
     #file = request.files.get("file")
 
     if not name or not location:
-        return jsonify({"error": "name, location y file are required"}), 400
+        return jsonify({"error": "name and location are required"}), 400
     
     #image_binary = Binary(file.read())
     
